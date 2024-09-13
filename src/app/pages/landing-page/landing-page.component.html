@@ -1,0 +1,28 @@
+<section class="container gists">
+  <div class="gist-header">
+    <h2>Public Gists</h2>
+    <mat-button-toggle-group
+      [(ngModel)]="activeLayout"
+      aria-label="Gist Layout Toggler"
+    >
+      <mat-button-toggle value="table">Table</mat-button-toggle>
+      <mat-button-toggle value="card">Card</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  @if(activeLayout == "table"){
+  <app-gist-table [dataSource]="tabelDataSource()" />
+  }@else {
+  <app-gist-cards [cardDataSource]="cardDataSource()" />
+  }
+
+  <mat-paginator
+    [pageSize]="10"
+    [length]="tabelDataSource().paginator"
+    (page)="onPaginationChange($event)"
+  />
+
+  @if(store.isLoading()){
+  <mat-spinner />
+  }
+</section>

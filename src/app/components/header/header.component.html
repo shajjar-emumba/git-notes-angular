@@ -1,0 +1,21 @@
+<header class="header">
+  <div class="header-content container">
+    <a routerLink="/">
+      <img src="emumba-logo.png" alt="company logo" />
+    </a>
+    <div class="header-actions">
+      <form class="search">
+        <mat-icon>search</mat-icon>
+        <input
+          type="text"
+          class="search-input"
+          name="searchQuery"
+          placeholder="Search..."
+          [formControl]="searchControl"
+        />
+      </form>
+
+      <button class="btn" (click)="onLogin()">Login</button>
+    </div>
+  </div>
+</header>

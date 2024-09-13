@@ -1,0 +1,22 @@
+<div class="gist-cards">
+  @for(gist of cardDataSource; track gist.id) {
+  <mat-card appearance="outlined" class="card">
+    <mat-card-content class="card-code"> code goes here </mat-card-content>
+    <mat-card-footer class="card-footer">
+      <img [src]="gist.avatar_url" alt="User Profile Picture" />
+      <div class="card-profile">
+        <p>
+          {{ gist.owner_name | titlecase }}/
+          <span class="gist-name">
+            {{ gist.gist_name | truncate : 10 }}
+          </span>
+        </p>
+        <div class="desc">
+          <span>Created 7 hours ago</span>
+          <span>{{ gist.description | truncate : 40 }}</span>
+        </div>
+      </div>
+    </mat-card-footer>
+  </mat-card>
+  }
+</div>

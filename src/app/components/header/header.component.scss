@@ -1,0 +1,60 @@
+.header {
+  background-color: #003b44;
+  padding: 15px 0;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+  &-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &-actions {
+    display: flex;
+    gap: 20px;
+
+    .btn {
+      background-color: white;
+      color: #003b44;
+      border: transparent;
+      padding: 0 30px;
+      border-radius: 4px;
+      font-weight: bold;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.search {
+  position: relative;
+  width: 100%;
+  mat-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    pointer-events: none;
+  }
+
+  &-input {
+    padding: 10px 10px 10px 40px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    background-color: transparent;
+    color: white;
+    font-size: 16px;
+
+    &::placeholder {
+      color: white;
+      opacity: 0.8;
+    }
+    &:focus {
+      outline: none;
+      border-color: white;
+    }
+  }
+}

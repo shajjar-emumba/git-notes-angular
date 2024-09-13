@@ -1,0 +1,14 @@
+.gists {
+  width: 85%;
+  margin-top: 20px;
+}
+.gist-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+
+  h2 {
+    font-size: 25px;
+  }
+}
