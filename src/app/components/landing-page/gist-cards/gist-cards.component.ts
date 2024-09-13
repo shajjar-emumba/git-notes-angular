@@ -9,7 +9,8 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { GistTableComponent } from '../gist-table/gist-table.component';
-import { GistData, GistPreview } from '../../../models/interfaces';
+import { GistPreview } from '../../../models/interfaces';
+import { TimeagoPipe } from '../../../pipes/timeago.pipe';
 
 @Component({
   selector: 'app-gist-cards',
@@ -26,6 +27,7 @@ import { GistData, GistPreview } from '../../../models/interfaces';
     ReactiveFormsModule,
     MatCardModule,
     GistTableComponent,
+    TimeagoPipe,
   ],
   templateUrl: './gist-cards.component.html',
   styleUrl: './gist-cards.component.scss',

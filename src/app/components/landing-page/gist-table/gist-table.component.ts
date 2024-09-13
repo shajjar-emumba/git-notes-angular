@@ -12,6 +12,7 @@ import { GistStore } from '../../../store/gists.store';
 import { TruncatePipe } from '../../../pipes/truncate.pipe';
 import { MatIconModule } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
+import { TimeagoPipe } from '../../../pipes/timeago.pipe';
 
 @Component({
   selector: 'app-gist-table',
@@ -30,6 +31,7 @@ import { MatIconButton } from '@angular/material/button';
     GistTableComponent,
     MatIconModule,
     MatIconButton,
+    TimeagoPipe,
   ],
   templateUrl: './gist-table.component.html',
   styleUrl: './gist-table.component.scss',

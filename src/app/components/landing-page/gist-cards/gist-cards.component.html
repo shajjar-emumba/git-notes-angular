@@ -6,14 +6,16 @@
       <img [src]="gist.avatar_url" alt="User Profile Picture" />
       <div class="card-profile">
         <p>
-          {{ gist.owner_name | titlecase }}/
+          {{ gist.owner_name | titlecase | truncate : 10 }}/
           <span class="gist-name">
             {{ gist.gist_name | truncate : 10 }}
           </span>
         </p>
         <div class="desc">
-          <span>Created 7 hours ago</span>
-          <span>{{ gist.description | truncate : 40 }}</span>
+          <span>Created at {{ gist.updated_at | timeago }}</span>
+          <span>{{
+            gist.description || "No Description" | truncate : 40
+          }}</span>
         </div>
       </div>
     </mat-card-footer>
