@@ -101,3 +101,9 @@ export interface GistPreview {
   updated_at: string;
   description: string;
 }
+
+export interface AuthState {
+  isLoading: boolean;
+  user: any | null;
+  error: string | null;
+}

@@ -1,0 +1,22 @@
+<div class="menu">
+  <img
+    class="menu-profile"
+    [src]="userPhotoURL"
+    alt="User Profile"
+    [matMenuTriggerFor]="menu"
+  />
+  <mat-menu #menu="matMenu" class="menu-items">
+    <div class="title">
+      <span>Signed in as</span>
+      <p>
+        {{ userDisplayName }}
+      </p>
+    </div>
+
+    <a mat-menu-item>Your gists</a>
+    <a mat-menu-item>Starred gists</a>
+    <a mat-menu-item>Your GitHub profile</a>
+
+    <button mat-menu-item (click)="authStore.signOut()">Sign out</button>
+  </mat-menu>
+</div>

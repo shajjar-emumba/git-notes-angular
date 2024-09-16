@@ -14,8 +14,11 @@
           [formControl]="searchControl"
         />
       </form>
-
-      <button class="btn" (click)="onLogin()">Login</button>
+      @if(authStore.user()){
+      <app-user-menu />
+      }@else {
+      <button class="btn" (click)="authStore.signIn()">Login</button>
+      }
     </div>
   </div>
 </header>
