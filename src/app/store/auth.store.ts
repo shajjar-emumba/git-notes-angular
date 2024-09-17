@@ -1,7 +1,13 @@
 import { inject } from '@angular/core';
 import { Auth, GithubAuthProvider, signInWithPopup } from '@angular/fire/auth';
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { AuthState } from '../models/interfaces';
+import {
+  patchState,
+  signalStore,
+  withHooks,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
+import { AuthState, User } from '../models/interfaces';
 
 const initialState: AuthState = {
   isLoading: false,
@@ -28,16 +34,20 @@ export const AuthStore = signalStore(
 
         const user = result.user;
 
+        const userInfo: User = {
+          accessToken: token,
+          displayName: user.displayName,
+          email: user.email,
+          uid: user.uid,
+          photoURL: user.photoURL,
+        };
+
         patchState(store, {
           isLoading: false,
-          user: {
-            accessToken: token,
-            displayName: user.displayName,
-            email: user.email,
-            uid: user.uid,
-            photoURL: user.photoURL,
-          },
+          user: userInfo,
         });
+
+        saveUserToLocalStorage(userInfo);
       } catch (error) {
         patchState(store, {
           isLoading: false,
@@ -54,6 +64,7 @@ export const AuthStore = signalStore(
           isLoading: false,
           user: null,
         });
+        saveUserToLocalStorage(null);
       } catch (error) {
         patchState(store, {
           isLoading: false,
@@ -61,5 +72,22 @@ export const AuthStore = signalStore(
         });
       }
     },
-  }))
+  })),
+  withHooks({
+    onInit(store) {
+      const userJson = localStorage.getItem('user');
+      if (userJson) {
+        const user: User = JSON.parse(userJson);
+        patchState(store, { user });
+      }
+    },
+  })
 );
+
+const saveUserToLocalStorage = (user: User | null) => {
+  if (user) {
+    localStorage.setItem('user', JSON.stringify(user));
+  } else {
+    localStorage.removeItem('user');
+  }
+};

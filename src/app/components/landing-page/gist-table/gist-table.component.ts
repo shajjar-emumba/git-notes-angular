@@ -13,6 +13,7 @@ import { TruncatePipe } from '../../../pipes/truncate.pipe';
 import { MatIconModule } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
 import { TimeagoPipe } from '../../../pipes/timeago.pipe';
+import { AuthStore } from '../../../store/auth.store';
 
 @Component({
   selector: 'app-gist-table',
@@ -38,7 +39,8 @@ import { TimeagoPipe } from '../../../pipes/timeago.pipe';
 })
 export class GistTableComponent {
   @Input() dataSource!: MatTableDataSource<any>;
-  store = inject(GistStore);
+  gistStore = inject(GistStore);
+  authStore = inject(AuthStore);
 
   displayedColumns: string[] = [
     'owner_name',

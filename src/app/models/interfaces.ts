@@ -107,3 +107,11 @@ export interface AuthState {
   user: any | null;
   error: string | null;
 }
+
+export interface User {
+  accessToken: string;
+  displayName: string | null;
+  email: string | null;
+  uid: string;
+  photoURL: string | null;
+}
