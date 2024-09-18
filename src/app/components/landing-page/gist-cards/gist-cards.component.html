@@ -1,6 +1,10 @@
 <div class="gist-cards">
   @for(gist of cardDataSource; track gist.id) {
-  <mat-card appearance="outlined" class="card">
+  <mat-card
+    appearance="outlined"
+    class="card"
+    [routerLink]="['/gist/', gist.id]"
+  >
     <mat-card-content class="card-code"> code goes here </mat-card-content>
     <mat-card-footer class="card-footer">
       <img [src]="gist.avatar_url" alt="User Profile Picture" />
