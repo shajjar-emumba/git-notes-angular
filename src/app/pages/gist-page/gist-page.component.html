@@ -1,0 +1,51 @@
+<section class="container gist-container">
+  @if(!gistStore.isLoading()){
+  <div class="profile-container">
+    <div class="profile">
+      <img [src]="gistStore.gists().avatar_url" alt="User Profile Picture" />
+      <div class="card-profile">
+        <p>
+          {{ gistStore.gists().owner_name | titlecase | truncate : 15 }} /
+          <span class="gist-name">
+            {{ gistStore.gists().gist_name }}
+          </span>
+        </p>
+        <div class="desc">
+          <span>Created at {{ gistStore.gists().updated_at | timeago }}</span>
+          <span>{{
+            gistStore.gists().description || "No Description" | truncate : 80
+          }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <button
+        class="actions-btn"
+        [disabled]="!authStore.user()"
+        mat-icon-button
+        aria-label="Fork Gist"
+      >
+        <mat-icon>fork_right</mat-icon>
+      </button>
+      <button
+        class="actions-btn"
+        [disabled]="!authStore.user()"
+        mat-icon-button
+        aria-label="Star Gist"
+      >
+        <mat-icon>star_border</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="file-container">
+    <div class="file-header">
+      <p>
+        {{ gistStore.gists().gist_name }}
+      </p>
+    </div>
+    <div class="file-code">File code goes here</div>
+  </div>
+  }@else {
+  <mat-spinner />
+  }
+</section>

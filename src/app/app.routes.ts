@@ -8,4 +8,11 @@ export const routes: Routes = [
         (m) => m.LandingPageComponent
       ),
   },
+  {
+    path: 'gist/:id',
+    loadComponent: () =>
+      import('./pages/gist-page/gist-page.component').then(
+        (m) => m.GistPageComponent
+      ),
+  },
 ];

@@ -1,0 +1,74 @@
+.gist-container {
+  width: 90%;
+  margin-top: 80px;
+}
+
+.profile-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+  }
+}
+.card-profile {
+  font-size: 14px;
+
+  .gist-name {
+    font-weight: bold;
+  }
+  .desc {
+    display: flex;
+    flex-direction: column;
+
+    span {
+      font-size: 12px;
+      line-height: 14px;
+      color: #7a7a7a;
+    }
+  }
+}
+
+.actions {
+  &-btn {
+    background-color: transparent;
+    border: none;
+  }
+  &-btn:hover {
+    cursor: pointer;
+  }
+
+  &-btn:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.file-container {
+  margin-top: 50px;
+  border: 1px solid #efefef;
+  min-height: 70vh;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.file-header {
+  padding-bottom: 8px;
+  border-bottom: 1px solid #efefef;
+  p {
+    color: #003b44;
+    font-size: 12px;
+  }
+}
+
+.file-code {
+  padding-top: 8px;
+}

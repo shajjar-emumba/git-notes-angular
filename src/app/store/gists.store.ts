@@ -25,35 +25,32 @@ export const GistStore = signalStore(
 
   withComputed((store) => ({
     searchGists: computed(() => {
-      const gists = store.gists();
+      const gists: GistData[] = store.gists();
 
-      return gists
-        .filter(({ owner }) => owner.login.includes(store.searchQuery()))
-        .map(({ owner, files, updated_at, id, description }) => {
-          const firstFile = files[Object.keys(files)[0]];
-          return {
-            id,
-            owner_name: owner.login,
-            gist_name: firstFile?.filename,
-            avatar_url: owner.avatar_url,
-            type: owner.type,
-            updated_at,
-            description,
-          };
-        });
+      if (gists.length > 0) {
+        return gists
+          .filter(({ owner }) => owner.login.includes(store.searchQuery()))
+          .map(({ owner, files, updated_at, id, description }) => {
+            const firstFile = files[Object.keys(files)[0]];
+            return {
+              id,
+              owner_name: owner.login,
+              gist_name: firstFile?.filename,
+              avatar_url: owner.avatar_url,
+              type: owner.type,
+              updated_at,
+              description,
+            };
+          });
+      } else {
+        return [];
+      }
     }),
 
-    dataSource: computed(() =>
-      store.gists().map((item) => {
-        return {
-          owner_name: item.owner.login,
-          gist_name: item.files[Object.keys(item.files)[0]]?.filename,
-          avatar_url: item.owner.avatar_url,
-          updated_at: item.updated_at,
-          type: item.owner.type,
-        };
-      })
-    ),
+    dataSource: computed(() => {
+      const { gists } = store;
+      return gists().map(mapToDataSource);
+    }),
   })),
 
   withMethods((store, gistService = inject(GistService)) => ({
@@ -86,8 +83,9 @@ export const GistStore = signalStore(
         switchMap((id) => {
           return gistService.getGistById(id).pipe(
             tapResponse({
-              next: (gists: GistData[]) => {
-                patchState(store, { gists, isLoading: false });
+              next: (gist: any) => {
+                const mappedGist = mapToDataSource(gist);
+                patchState(store, { gists: mappedGist, isLoading: false });
               },
               error: (err: Error) => {
                 patchState(store, { isLoading: false, error: err.message });
@@ -99,3 +97,17 @@ export const GistStore = signalStore(
     ),
   }))
 );
+
+// Helper function to map gists for DataSource
+const mapToDataSource = (gist: GistData | any) => {
+  const firstFile = gist.files[Object.keys(gist.files)[0]];
+  return {
+    id: gist.id,
+    owner_name: gist.owner.login,
+    gist_name: firstFile?.filename,
+    gist_file_raw_url: firstFile?.raw_url,
+    avatar_url: gist.owner.avatar_url,
+    updated_at: gist.updated_at,
+    type: gist.owner.type,
+  };
+};

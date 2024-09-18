@@ -86,7 +86,7 @@ export interface GistData {
 }
 
 export interface GistState {
-  gists: GistData[];
+  gists: GistData[] | any;
   isLoading: boolean;
   error: string;
   searchQuery: string;

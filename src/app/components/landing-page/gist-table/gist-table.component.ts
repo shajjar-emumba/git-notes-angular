@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
 import { TimeagoPipe } from '../../../pipes/timeago.pipe';
 import { AuthStore } from '../../../store/auth.store';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-gist-table',
@@ -33,6 +34,7 @@ import { AuthStore } from '../../../store/auth.store';
     MatIconModule,
     MatIconButton,
     TimeagoPipe,
+    RouterLink,
   ],
   templateUrl: './gist-table.component.html',
   styleUrl: './gist-table.component.scss',
