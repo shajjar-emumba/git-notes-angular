@@ -1,28 +1,7 @@
 <div class="gist-cards">
   @for(gist of cardDataSource; track gist.id) {
-  <mat-card
-    appearance="outlined"
-    class="card"
-    [routerLink]="['/gist/', gist.id]"
-  >
-    <mat-card-content class="card-code"> code goes here </mat-card-content>
-    <mat-card-footer class="card-footer">
-      <img [src]="gist.avatar_url" alt="User Profile Picture" />
-      <div class="card-profile">
-        <p>
-          {{ gist.owner_name | titlecase | truncate : 10 }}/
-          <span class="gist-name">
-            {{ gist.gist_name | truncate : 10 }}
-          </span>
-        </p>
-        <div class="desc">
-          <span>Created at {{ gist.updated_at | timeago }}</span>
-          <span>{{
-            gist.description || "No Description" | truncate : 40
-          }}</span>
-        </div>
-      </div>
-    </mat-card-footer>
-  </mat-card>
+  <div>
+    <app-gist-card [gist]="gist" />
+  </div>
   }
 </div>

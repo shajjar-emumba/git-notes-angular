@@ -14,6 +14,7 @@ import { pipe, switchMap, tap } from 'rxjs';
 
 const initialState: GistState = {
   gists: [],
+  userGists: [],
   isLoading: false,
   error: '',
   searchQuery: '',
@@ -95,6 +96,29 @@ export const GistStore = signalStore(
         })
       )
     ),
+
+    getUserGists: rxMethod<string>(
+      pipe(
+        tap(() => patchState(store, { isLoading: true })),
+        switchMap((token) => {
+          return gistService.getUserGists(token).pipe(
+            tapResponse({
+              next: (gists: GistData[]) => {
+                const mappedGist = gists.map(mapToDataSource);
+                patchState(store, {
+                  userGists: mappedGist,
+                  isLoading: false,
+                });
+              },
+              error: (err: Error) => {
+                console.log(err);
+                patchState(store, { isLoading: false, error: err.message });
+              },
+            })
+          );
+        })
+      )
+    ),
   }))
 );
 
@@ -109,5 +133,6 @@ const mapToDataSource = (gist: GistData | any) => {
     avatar_url: gist.owner.avatar_url,
     updated_at: gist.updated_at,
     type: gist.owner.type,
+    description: gist.owner.description,
   };
 };

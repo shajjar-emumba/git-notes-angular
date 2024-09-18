@@ -1,0 +1,42 @@
+<mat-card appearance="outlined" class="card" [routerLink]="['/gist/', gist.id]">
+  <mat-card-content class="card-code"> code goes here </mat-card-content>
+  <mat-card-footer class="card-footer">
+    <div class="card-profile">
+      <img [src]="gist.avatar_url" alt="User Profile Picture" />
+      <div>
+        <p>
+          {{ gist.owner_name | titlecase }}/
+          <span class="gist-name">
+            {{ gist.gist_name | truncate : 10 }}
+          </span>
+        </p>
+        <div class="desc">
+          <span>Created at {{ gist.updated_at | timeago }}</span>
+          <span>{{
+            gist.description || "No Description" | truncate : 20
+          }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-actions">
+      <button
+        class="actions-btn"
+        [disabled]="!authStore.user()"
+        mat-icon-button
+        aria-label="Fork Gist"
+        (click)="$event.stopPropagation()"
+      >
+        <mat-icon>fork_right</mat-icon>
+      </button>
+      <button
+        class="actions-btn"
+        [disabled]="!authStore.user()"
+        mat-icon-button
+        aria-label="Star Gist"
+        (click)="$event.stopPropagation()"
+      >
+        <mat-icon>star_border</mat-icon>
+      </button>
+    </div>
+  </mat-card-footer>
+</mat-card>

@@ -1,0 +1,48 @@
+.user {
+  margin-top: 30px;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+
+  &-profile {
+    text-align: center;
+
+    img {
+      height: 250px;
+      width: 250px;
+      border-radius: 50%;
+    }
+    a {
+      padding: 10px 20px;
+      display: inline-block;
+      background-color: #003b44;
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+  }
+  &-gists {
+    flex: 1;
+
+    & h2 {
+      font-size: 25px;
+    }
+
+    .count {
+      background-color: #003b44;
+      border-radius: 50%;
+      padding: 3px 10px;
+      color: white;
+    }
+  }
+}
+
+.gist-cards {
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+  gap: 20px;
+  height: 70vh;
+  margin: 20px 0;
+}

@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { AuthStore } from '../../../store/auth.store';
 import { MatMenuModule } from '@angular/material/menu';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-menu',
   standalone: true,
-  imports: [MatMenuModule],
+  imports: [MatMenuModule, RouterLink],
   templateUrl: './user-menu.component.html',
   styleUrl: './user-menu.component.scss',
 })

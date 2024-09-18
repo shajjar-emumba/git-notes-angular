@@ -15,4 +15,11 @@ export const routes: Routes = [
         (m) => m.GistPageComponent
       ),
   },
+  {
+    path: 'user-gists',
+    loadComponent: () =>
+      import('./pages/user-gists-page/user-gists-page.component').then(
+        (m) => m.UserGistsPageComponent
+      ),
+  },
 ];

@@ -1,0 +1,25 @@
+<section class="container user">
+  @if(!gistStore.isLoading()){
+
+  <div class="user-profile">
+    <img [src]="gistStore.userGists()[0].avatar_url" alt="User avatar" />
+    <h3>{{ gistStore.userGists()[0].owner_name }}</h3>
+    <a href="https://github.com/shajjar-emumba" target="_blank"
+      >View GitHub Profile</a
+    >
+  </div>
+
+  <div class="user-gists">
+    <h2>
+      All Gists <span class="count">{{ gistStore.userGists().length }}</span>
+    </h2>
+    <div class="gist-cards">
+      @for(gist of gistStore.userGists(); track gist.id) {
+      <app-gist-card [gist]="gist" />
+      }
+    </div>
+  </div>
+  }@else {
+  <mat-spinner></mat-spinner>
+  }
+</section>

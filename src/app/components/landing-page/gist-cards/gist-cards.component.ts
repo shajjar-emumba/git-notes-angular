@@ -12,6 +12,7 @@ import { GistTableComponent } from '../gist-table/gist-table.component';
 import { GistPreview } from '../../../models/interfaces';
 import { TimeagoPipe } from '../../../pipes/timeago.pipe';
 import { RouterLink } from '@angular/router';
+import { GistCardComponent } from '../../gist-card/gist-card.component';
 
 @Component({
   selector: 'app-gist-cards',
@@ -30,6 +31,7 @@ import { RouterLink } from '@angular/router';
     GistTableComponent,
     TimeagoPipe,
     RouterLink,
+    GistCardComponent,
   ],
   templateUrl: './gist-cards.component.html',
   styleUrl: './gist-cards.component.scss',

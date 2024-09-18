@@ -87,6 +87,7 @@ export interface GistData {
 
 export interface GistState {
   gists: GistData[] | any;
+  userGists: GistData[] | any;
   isLoading: boolean;
   error: string;
   searchQuery: string;
@@ -96,10 +97,11 @@ export interface GistPreview {
   id: string;
   owner_name: string;
   gist_name: string;
+  gist_file_raw_url?: string;
   avatar_url: string;
   type: string;
   updated_at: string;
-  description: string;
+  description?: string;
 }
 
 export interface AuthState {

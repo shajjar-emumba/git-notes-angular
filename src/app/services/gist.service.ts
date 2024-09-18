@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { GistData } from '../models/interfaces';
@@ -16,5 +16,15 @@ export class GistService {
 
   getGistById(id: string): Observable<GistData[]> {
     return this.http.get<GistData[]>(`${GistEndPoints.GIST_BY_ID}/${id}`);
+  }
+
+  getUserGists(token: string): Observable<GistData[]> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<GistData[]>(`${GistEndPoints.USER_GISTS}`, {
+      headers,
+    });
   }
 }
