@@ -22,6 +22,7 @@ export const AuthStore = signalStore(
   withMethods((store, firebaseAuth = inject(Auth)) => ({
     async signIn() {
       const provider = new GithubAuthProvider();
+      provider.addScope('gist');
       try {
         patchState(store, { isLoading: true });
         const result = await signInWithPopup(firebaseAuth, provider);
