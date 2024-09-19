@@ -8,6 +8,7 @@ import { AuthStore } from '../../store/auth.store';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
 import { GistPreview } from '../../models/interfaces';
+import { GistStore } from '../../store/gists.store';
 
 @Component({
   selector: 'app-gist-card',
@@ -27,4 +28,14 @@ import { GistPreview } from '../../models/interfaces';
 export class GistCardComponent {
   @Input() gist!: GistPreview;
   authStore = inject(AuthStore);
+  gistStore = inject(GistStore);
+
+  deleteGist(e: Event) {
+    e.stopPropagation();
+    console.log('Delete Gist Clicked!', this.gist.id);
+    this.gistStore.deleteUserGist([
+      this.authStore.user().accessToken,
+      this.gist.id,
+    ]);
+  }
 }

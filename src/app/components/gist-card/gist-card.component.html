@@ -37,6 +37,15 @@
       >
         <mat-icon>star_border</mat-icon>
       </button>
+      <button
+        class="actions-btn"
+        [disabled]="!authStore.user()"
+        mat-icon-button
+        aria-label="Delete Gist"
+        (click)="deleteGist($event)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
   </mat-card-footer>
 </mat-card>

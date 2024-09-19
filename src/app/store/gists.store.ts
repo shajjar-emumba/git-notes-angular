@@ -144,6 +144,32 @@ export const GistStore = signalStore(
           })
         )
       ),
+
+      deleteUserGist: rxMethod<[string, string]>(
+        pipe(
+          tap(() => patchState(store, { isLoading: true })),
+          switchMap(([token, id]) => {
+            return gistService.deleteGist(token, id).pipe(
+              tapResponse({
+                next: () => {
+                  const currentGists: GistData[] = store.userGists() || [];
+                  const updatedGists = currentGists.filter(
+                    (gist) => gist.id !== id
+                  );
+                  patchState(store, {
+                    userGists: updatedGists,
+                    isLoading: false,
+                  });
+                },
+                error: (err: Error) => {
+                  console.log(err);
+                  patchState(store, { isLoading: false, error: err.message });
+                },
+              })
+            );
+          })
+        )
+      ),
     })
   )
 );

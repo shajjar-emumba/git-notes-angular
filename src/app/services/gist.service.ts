@@ -38,4 +38,14 @@ export class GistService {
       headers,
     });
   }
+
+  deleteGist(token: string, gistId: string): Observable<void> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.delete<void>(`${GistEndPoints.GIST_BY_ID}/${gistId}`, {
+      headers,
+    });
+  }
 }
