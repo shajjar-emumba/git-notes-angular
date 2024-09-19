@@ -1,0 +1,48 @@
+<section class="container create-container">
+  <h2>Create Gist</h2>
+
+  <form [formGroup]="gistForm" class="form" (ngSubmit)="submitGist()">
+    <input
+      class="desc"
+      id="description"
+      type="text"
+      formControlName="description"
+      placeholder="Enter Gist Description"
+    />
+
+    <div formArrayName="files">
+      @for(file of files.controls; track file;let i = $index){
+
+      <div [formGroupName]="i" class="files-item">
+        <div class="files-item-header">
+          <input
+            id="fileName-{{ i }}"
+            formControlName="fileName"
+            placeholder="filename.txt"
+          />
+          @if(files.length>1){
+          <button
+            type="button"
+            mat-icon-button
+            color="warn"
+            (click)="removeFile(i)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+          }
+        </div>
+        <div class="files-item-content">
+          <textarea id="content-{{ i }}" formControlName="content"></textarea>
+        </div>
+      </div>
+      }
+    </div>
+
+    <div class="actions">
+      <button class="add" type="button" (click)="addFile()">Add File</button>
+      <button class="create" type="submit" [disabled]="gistForm.invalid">
+        Create Gist
+      </button>
+    </div>
+  </form>
+</section>

@@ -37,6 +37,12 @@ $git-notes-angular-theme: mat.define-theme(
 // @include mat.color-variants-backwards-compatibility($git-notes-angular-theme);
 /* You can add global styles to this file, and also import other style files */
 
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
 html,
 body {
   height: 100%;

@@ -22,4 +22,11 @@ export const routes: Routes = [
         (m) => m.UserGistsPageComponent
       ),
   },
+  {
+    path: 'create-gists',
+    loadComponent: () =>
+      import('./pages/create-gist/create-gist.component').then(
+        (m) => m.CreateGistComponent
+      ),
+  },
 ];
