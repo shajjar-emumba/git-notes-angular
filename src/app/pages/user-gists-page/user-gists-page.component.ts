@@ -8,6 +8,7 @@ import { TimeagoPipe } from '../../pipes/timeago.pipe';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { AuthStore } from '../../store/auth.store';
 import { GistCardComponent } from '../../components/gist-card/gist-card.component';
+import { EmailtoDisplayNamePipe } from '../../pipes/emailto-display-name.pipe';
 
 @Component({
   selector: 'app-user-gists-page',
@@ -20,6 +21,7 @@ import { GistCardComponent } from '../../components/gist-card/gist-card.componen
     TimeagoPipe,
     MatProgressSpinner,
     GistCardComponent,
+    EmailtoDisplayNamePipe,
   ],
   templateUrl: './user-gists-page.component.html',
   styleUrl: './user-gists-page.component.scss',
