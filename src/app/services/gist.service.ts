@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { GistData } from '../models/interfaces';
+import { CreateGistData, GistData } from '../models/interfaces';
 import { GistEndPoints } from '../models/enums';
 
 @Injectable({
@@ -24,6 +24,17 @@ export class GistService {
     });
 
     return this.http.get<GistData[]>(`${GistEndPoints.USER_GISTS}`, {
+      headers,
+    });
+  }
+
+  createGist(token: string, gistData: CreateGistData): Observable<GistData> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post<GistData>(GistEndPoints.CREATE_GIST, gistData, {
       headers,
     });
   }

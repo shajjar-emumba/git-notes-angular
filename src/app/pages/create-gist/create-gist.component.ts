@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -9,6 +9,9 @@ import {
 import { MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { CreateFile, CreateGistData } from '../../models/interfaces';
+import { GistStore } from '../../store/gists.store';
+import { AuthStore } from '../../store/auth.store';
 
 @Component({
   selector: 'app-create-gist',
@@ -19,6 +22,8 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class CreateGistComponent {
   gistForm: FormGroup;
+  gistStore = inject(GistStore);
+  authStore = inject(AuthStore);
 
   constructor(private formBuilder: FormBuilder) {
     this.gistForm = this.formBuilder.group({
@@ -48,6 +53,24 @@ export class CreateGistComponent {
 
   submitGist() {
     if (this.gistForm.valid) {
+      const gistFiles: CreateFile = {};
+
+      this.gistForm.value.files.forEach(
+        (file: { fileName: string; content: string }) => {
+          gistFiles[file.fileName] = { content: file.content };
+        }
+      );
+
+      const createGistData: CreateGistData = {
+        description: this.gistForm.value.description,
+        public: false,
+        files: gistFiles,
+      };
+
+      this.gistStore.createUserGist([
+        this.authStore.user().accessToken,
+        createGistData,
+      ]);
     }
   }
 }

@@ -117,3 +117,15 @@ export interface User {
   uid: string;
   photoURL: string | null;
 }
+
+export interface CreateFile {
+  [fileName: string]: {
+    content: string;
+  };
+}
+
+export interface CreateGistData {
+  description: string;
+  public: boolean;
+  files: CreateFile;
+}

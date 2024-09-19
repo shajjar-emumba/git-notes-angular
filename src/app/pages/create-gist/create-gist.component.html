@@ -41,7 +41,7 @@
     <div class="actions">
       <button class="add" type="button" (click)="addFile()">Add File</button>
       <button class="create" type="submit" [disabled]="gistForm.invalid">
-        Create Gist
+        @if(gistStore.isLoading()){ Creating...}@else { Create Gist }
       </button>
     </div>
   </form>
