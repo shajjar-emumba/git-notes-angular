@@ -48,4 +48,23 @@ export class GistService {
       headers,
     });
   }
+
+  updateGist(
+    token: string,
+    gistId: string,
+    gistData: CreateGistData
+  ): Observable<GistData> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.patch<GistData>(
+      `${GistEndPoints.GIST_BY_ID}/${gistId}`,
+      gistData,
+      {
+        headers,
+      }
+    );
+  }
 }

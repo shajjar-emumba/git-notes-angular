@@ -170,6 +170,28 @@ export const GistStore = signalStore(
           })
         )
       ),
+
+      updateUserGist: rxMethod<[string, string, CreateGistData]>(
+        pipe(
+          tap(() => patchState(store, { isLoading: true })),
+          switchMap(([token, id, gistData]) => {
+            return gistService.updateGist(token, id, gistData).pipe(
+              tapResponse({
+                next: () => {
+                  router.navigateByUrl('/user-gists');
+                  patchState(store, {
+                    isLoading: false,
+                  });
+                },
+                error: (err: Error) => {
+                  console.log(err);
+                  patchState(store, { isLoading: false, error: err.message });
+                },
+              })
+            );
+          })
+        )
+      ),
     })
   )
 );

@@ -46,6 +46,16 @@
       >
         <mat-icon>delete</mat-icon>
       </button>
+      <button
+        class="actions-btn"
+        [disabled]="!authStore.user()"
+        mat-icon-button
+        aria-label="Edit Gist"
+        [routerLink]="['/manage-gists/', gist.id]"
+        (click)="$event.stopPropagation()"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
     </div>
   </mat-card-footer>
 </mat-card>

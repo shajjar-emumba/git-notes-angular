@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateGistComponent } from './create-gist.component';
+import { ManageGistComponent } from './manage-gist.component';
 
-describe('CreateGistComponent', () => {
-  let component: CreateGistComponent;
-  let fixture: ComponentFixture<CreateGistComponent>;
+describe('ManageGistComponent', () => {
+  let component: ManageGistComponent;
+  let fixture: ComponentFixture<ManageGistComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CreateGistComponent]
+      imports: [ManageGistComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CreateGistComponent);
+    fixture = TestBed.createComponent(ManageGistComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

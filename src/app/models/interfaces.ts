@@ -121,11 +121,21 @@ export interface User {
 export interface CreateFile {
   [fileName: string]: {
     content: string;
-  };
+  } | null;
 }
 
 export interface CreateGistData {
   description: string;
   public: boolean;
   files: CreateFile;
+}
+
+export interface File {
+  fileName: string;
+  content: string;
+}
+
+export interface GistFormData {
+  description: string;
+  files: File[];
 }

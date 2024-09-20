@@ -1,5 +1,5 @@
-<section class="container create-container">
-  <h2>Create Gist</h2>
+<section class="container manage-container">
+  <h2>{{ gistId ? "Edit" : "Create" }} Gist</h2>
 
   <form [formGroup]="gistForm" class="form" (ngSubmit)="submitGist()">
     <input
@@ -41,8 +41,13 @@
     <div class="actions">
       <button class="add" type="button" (click)="addFile()">Add File</button>
       <button class="create" type="submit" [disabled]="gistForm.invalid">
-        @if(gistStore.isLoading()){ Creating...}@else { Create Gist }
+        @if(gistStore.isLoading()){
+        {{ gistId ? "Editing..." : "Creating..." }}
+        }@else {
+        {{ gistId ? "Edit" : "Create" }} Gist }
       </button>
     </div>
   </form>
 </section>
+
+<div></div>

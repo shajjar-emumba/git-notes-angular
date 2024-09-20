@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { userGistsResolver } from './resolvers/user-gists.resolver';
 
 export const routes: Routes = [
   {
@@ -23,10 +24,20 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'create-gists',
+    path: 'manage-gists',
     loadComponent: () =>
-      import('./pages/create-gist/create-gist.component').then(
-        (m) => m.CreateGistComponent
+      import('./pages/manage-gist/manage-gist.component').then(
+        (m) => m.ManageGistComponent
       ),
+  },
+  {
+    path: 'manage-gists/:id',
+    loadComponent: () =>
+      import('./pages/manage-gist/manage-gist.component').then(
+        (m) => m.ManageGistComponent
+      ),
+    resolve: {
+      userGists: userGistsResolver,
+    },
   },
 ];
