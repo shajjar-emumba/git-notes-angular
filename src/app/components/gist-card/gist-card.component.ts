@@ -27,6 +27,7 @@ import { GistStore } from '../../store/gists.store';
 })
 export class GistCardComponent {
   @Input() gist!: GistPreview;
+  @Input() isPublicGists: boolean = true;
   authStore = inject(AuthStore);
   gistStore = inject(GistStore);
 

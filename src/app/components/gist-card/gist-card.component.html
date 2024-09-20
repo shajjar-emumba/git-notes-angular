@@ -37,6 +37,7 @@
       >
         <mat-icon>star_border</mat-icon>
       </button>
+      @if(!isPublicGists){
       <button
         class="actions-btn"
         [disabled]="!authStore.user()"
@@ -56,6 +57,7 @@
       >
         <mat-icon>edit</mat-icon>
       </button>
+      }
     </div>
   </mat-card-footer>
 </mat-card>

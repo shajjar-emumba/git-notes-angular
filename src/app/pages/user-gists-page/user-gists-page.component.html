@@ -21,7 +21,7 @@
     </h2>
     <div class="gist-cards">
       @for(gist of gistStore.userGists(); track gist.id) {
-      <app-gist-card [gist]="gist" />
+      <app-gist-card [gist]="gist" [isPublicGists]="false" />
       }
     </div>
   </div>
