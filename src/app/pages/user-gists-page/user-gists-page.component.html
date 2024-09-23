@@ -17,7 +17,8 @@
 
   <div class="user-gists">
     <h2>
-      All Gists <span class="count">{{ gistStore.userGists().length }}</span>
+      {{ isStarredView ? "Starred Gists" : "All Gists" }}
+      <span class="count">{{ gistStore.userGists().length }}</span>
     </h2>
     <div class="gist-cards">
       @for(gist of gistStore.userGists(); track gist.id) {

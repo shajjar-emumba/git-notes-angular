@@ -67,4 +67,30 @@ export class GistService {
       }
     );
   }
+
+  starGist(token: string, gistId: string): Observable<void> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.put<void>(
+      `${GistEndPoints.GIST_BY_ID}/${gistId}/star`,
+      { gist_id: gistId },
+      {
+        headers,
+      }
+    );
+  }
+
+  starredGists(token: string): Observable<GistData[]> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get<GistData[]>(`${GistEndPoints.STARRED_GIST}`, {
+      headers,
+    });
+  }
 }

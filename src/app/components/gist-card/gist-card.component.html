@@ -33,7 +33,7 @@
         [disabled]="!authStore.user()"
         mat-icon-button
         aria-label="Star Gist"
-        (click)="$event.stopPropagation()"
+        (click)="onStarGist($event)"
       >
         <mat-icon>star_border</mat-icon>
       </button>

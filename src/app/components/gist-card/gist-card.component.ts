@@ -9,6 +9,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
 import { GistPreview } from '../../models/interfaces';
 import { GistStore } from '../../store/gists.store';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-gist-card',
@@ -21,6 +22,7 @@ import { GistStore } from '../../store/gists.store';
     RouterLink,
     MatIcon,
     MatIconButton,
+    MatProgressSpinner,
   ],
   templateUrl: './gist-card.component.html',
   styleUrl: './gist-card.component.scss',
@@ -33,10 +35,14 @@ export class GistCardComponent {
 
   deleteGist(e: Event) {
     e.stopPropagation();
-    console.log('Delete Gist Clicked!', this.gist.id);
     this.gistStore.deleteUserGist([
       this.authStore.user().accessToken,
       this.gist.id,
     ]);
+  }
+
+  onStarGist(e: Event) {
+    e.stopPropagation();
+    this.gistStore.starGist([this.authStore.user().accessToken, this.gist.id]);
   }
 }

@@ -23,6 +23,16 @@ export const routes: Routes = [
       import('./pages/user-gists-page/user-gists-page.component').then(
         (m) => m.UserGistsPageComponent
       ),
+    data: { type: 'all' },
+    canActivate: [authGuard],
+  },
+  {
+    path: 'starred-gists',
+    loadComponent: () =>
+      import('./pages/user-gists-page/user-gists-page.component').then(
+        (m) => m.UserGistsPageComponent
+      ),
+    data: { type: 'starred' },
     canActivate: [authGuard],
   },
   {

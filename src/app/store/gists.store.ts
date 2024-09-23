@@ -192,6 +192,51 @@ export const GistStore = signalStore(
           })
         )
       ),
+
+      starGist: rxMethod<[string, string]>(
+        pipe(
+          tap(() => patchState(store, { isLoading: true })),
+          switchMap(([token, id]) => {
+            return gistService.starGist(token, id).pipe(
+              tapResponse({
+                next: (response) => {
+                  console.log('Gist starred Successfully');
+                  patchState(store, {
+                    isLoading: false,
+                  });
+                },
+                error: (err: Error) => {
+                  console.log(err);
+                  patchState(store, { isLoading: false, error: err.message });
+                },
+              })
+            );
+          })
+        )
+      ),
+
+      getUserStarredGists: rxMethod<string>(
+        pipe(
+          tap(() => patchState(store, { isLoading: true })),
+          switchMap((token) => {
+            return gistService.starredGists(token).pipe(
+              tapResponse({
+                next: (gists: GistData[]) => {
+                  const mappedGist = gists.map(mapToDataSource);
+                  patchState(store, {
+                    userGists: mappedGist,
+                    isLoading: false,
+                  });
+                },
+                error: (err: Error) => {
+                  console.log(err);
+                  patchState(store, { isLoading: false, error: err.message });
+                },
+              })
+            );
+          })
+        )
+      ),
     })
   )
 );

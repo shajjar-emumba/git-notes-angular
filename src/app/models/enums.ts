@@ -7,4 +7,5 @@ export enum GistEndPoints {
   GIST_BY_ID = `${ApiBase.GISTS}`,
   USER_GISTS = `${ApiBase.GISTS}`,
   CREATE_GIST = `${ApiBase.GISTS}`,
+  STARRED_GIST = `${ApiBase.GISTS}/starred`,
 }

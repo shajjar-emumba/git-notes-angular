@@ -1,7 +1,8 @@
+import { Subscription } from 'rxjs';
 import { Component, inject } from '@angular/core';
 import { GistStore } from '../../store/gists.store';
-import { MatCard, MatCardModule } from '@angular/material/card';
-import { RouterLink } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TitleCasePipe } from '@angular/common';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 import { TimeagoPipe } from '../../pipes/timeago.pipe';
@@ -29,8 +30,32 @@ import { EmailtoDisplayNamePipe } from '../../pipes/emailto-display-name.pipe';
 export class UserGistsPageComponent {
   gistStore = inject(GistStore);
   authStore = inject(AuthStore);
+  activatedRoute = inject(ActivatedRoute);
+  isStarredView: boolean = false;
+
+  private subscription$: Subscription | undefined;
 
   ngOnInit() {
+    this.subscription$ = this.activatedRoute.data.subscribe((data) => {
+      if (data['type'] === 'all') {
+        this.loadUserGists();
+      } else {
+        this.loadStarredGists();
+      }
+    });
+  }
+
+  private loadUserGists() {
     this.gistStore.getUserGists(this.authStore.user().accessToken);
+    this.isStarredView = false;
+  }
+
+  private loadStarredGists() {
+    this.gistStore.getUserStarredGists(this.authStore.user().accessToken);
+    this.isStarredView = true;
+  }
+
+  ngOnDestroy() {
+    this.subscription$?.unsubscribe();
   }
 }
