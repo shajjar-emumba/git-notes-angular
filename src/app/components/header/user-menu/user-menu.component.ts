@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AuthStore } from '../../../store/auth.store';
 import { MatMenuModule } from '@angular/material/menu';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-menu',
@@ -12,6 +12,7 @@ import { RouterLink } from '@angular/router';
 })
 export class UserMenuComponent {
   authStore = inject(AuthStore);
+  router = inject(Router);
 
   get userDisplayName() {
     const user = this.authStore.user();
@@ -20,5 +21,10 @@ export class UserMenuComponent {
 
   get userPhotoURL() {
     return this.authStore.user()?.photoURL || 'emumba-logo.png';
+  }
+
+  onSignOut() {
+    this.router.navigateByUrl('/');
+    this.authStore.signOut();
   }
 }

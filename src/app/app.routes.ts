@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { userGistsResolver } from './resolvers/user-gists.resolver';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,7 @@ export const routes: Routes = [
       import('./pages/user-gists-page/user-gists-page.component').then(
         (m) => m.UserGistsPageComponent
       ),
+    canActivate: [authGuard],
   },
   {
     path: 'manage-gists',
@@ -29,6 +31,7 @@ export const routes: Routes = [
       import('./pages/manage-gist/manage-gist.component').then(
         (m) => m.ManageGistComponent
       ),
+    canActivate: [authGuard],
   },
   {
     path: 'manage-gists/:id',
@@ -39,5 +42,6 @@ export const routes: Routes = [
     resolve: {
       userGists: userGistsResolver,
     },
+    canActivate: [authGuard],
   },
 ];
