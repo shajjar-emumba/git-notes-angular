@@ -46,12 +46,12 @@ export class UserGistsPageComponent {
   }
 
   private loadUserGists() {
-    this.gistStore.getUserGists(this.authStore.user().accessToken);
+    this.gistStore.getUserGists();
     this.isStarredView = false;
   }
 
   private loadStarredGists() {
-    this.gistStore.getUserStarredGists(this.authStore.user().accessToken);
+    this.gistStore.getUserStarredGists();
     this.isStarredView = true;
   }
 

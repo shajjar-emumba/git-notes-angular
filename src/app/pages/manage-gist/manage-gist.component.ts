@@ -11,7 +11,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { CreateFile, File, GistFormData } from '../../models/interfaces';
 import { GistStore } from '../../store/gists.store';
-import { AuthStore } from '../../store/auth.store';
 import { ActivatedRoute } from '@angular/router';
 import { JsonPipe } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -37,7 +36,6 @@ export class ManageGistComponent {
   private subscription$: Subscription | undefined;
 
   gistStore = inject(GistStore);
-  authStore = inject(AuthStore);
   activatedRoute = inject(ActivatedRoute);
 
   constructor(private formBuilder: FormBuilder) {
@@ -148,18 +146,11 @@ export class ManageGistComponent {
 
   private updateGist(gistData: any) {
     const updateGistData = { ...gistData, gist_id: this.gistId };
-    this.gistStore.updateUserGist([
-      this.authStore.user().accessToken,
-      this.gistId,
-      updateGistData,
-    ]);
+    this.gistStore.updateUserGist([this.gistId, updateGistData]);
   }
 
   private createGist(gistData: any) {
     const createGistData = { ...gistData, public: false };
-    this.gistStore.createUserGist([
-      this.authStore.user().accessToken,
-      createGistData,
-    ]);
+    this.gistStore.createUserGist(createGistData);
   }
 }

@@ -35,14 +35,11 @@ export class GistCardComponent {
 
   deleteGist(e: Event) {
     e.stopPropagation();
-    this.gistStore.deleteUserGist([
-      this.authStore.user().accessToken,
-      this.gist.id,
-    ]);
+    this.gistStore.deleteUserGist(this.gist.id);
   }
 
   onStarGist(e: Event) {
     e.stopPropagation();
-    this.gistStore.starGist([this.authStore.user().accessToken, this.gist.id]);
+    this.gistStore.starGist(this.gist.id);
   }
 }

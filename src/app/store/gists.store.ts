@@ -37,6 +37,7 @@ export const GistStore = signalStore(
             .map(mapToDataSource)
         : [];
     }),
+
     dataSource: computed(() => {
       const { gists } = store;
       return gists().map(mapToDataSource);
@@ -60,33 +61,14 @@ export const GistStore = signalStore(
           switchMap(() => {
             return gistService.getAllPublicGists().pipe(
               switchMap((gists: GistData[]) => {
-                if (authStore.user()) {
-                  const token = authStore.user().accessToken;
-                  const starredGistsChecks$ = gists.map((gist) => {
-                    return gistService.isGistStarred(token, gist.id).pipe(
-                      map(() => ({
-                        ...gist,
-                        isStarred: true,
-                      })),
-                      catchError(() =>
-                        of({
-                          ...gist,
-                          isStarred: false,
-                        })
-                      )
-                    );
-                  });
-
-                  return forkJoin(starredGistsChecks$);
-                } else {
-                  return of(gists);
-                }
+                const token = authStore.user()?.accessToken;
+                return token
+                  ? forkJoin(checkStarredGists(gists, gistService, token))
+                  : of(gists);
               }),
               tapResponse({
                 next: (gists) => {
-                  console.log(gists);
                   patchState(store, { gists, isLoading: false });
-                  console.log(gists);
                 },
                 error: (err: Error) => {
                   patchState(store, { isLoading: false, error: err.message });
@@ -116,37 +98,22 @@ export const GistStore = signalStore(
         )
       ),
 
-      getUserGists: rxMethod<string>(
+      getUserGists: rxMethod<void>(
         pipe(
           tap(() => patchState(store, { isLoading: true })),
-          switchMap((token) => {
-            return gistService.getUserGists(token).pipe(
-              switchMap((gists: GistData[]) => {
-                if (!gists.length) {
-                  return of([]);
-                }
-                const starredGistsChecks$ = gists.map((gist) => {
-                  return gistService.isGistStarred(token, gist.id).pipe(
-                    map(() => ({
-                      ...mapToDataSource(gist),
-                      isStarred: true,
-                    })),
-                    catchError(() =>
-                      of({
-                        ...mapToDataSource(gist),
-                        isStarred: false,
-                      })
-                    )
-                  );
-                });
+          switchMap(() => {
+            const token = authStore.user()?.accessToken;
 
-                return forkJoin(starredGistsChecks$);
-              }),
+            return gistService.getUserGists(token).pipe(
+              switchMap((gists) =>
+                gists.length
+                  ? forkJoin(checkStarredGists(gists, gistService, token))
+                  : of([])
+              ),
               tapResponse({
-                next: (mappedGists) => {
-                  console.log(mappedGists);
+                next: (gists) => {
                   patchState(store, {
-                    userGists: mappedGists,
+                    userGists: gists.map(mapToDataSource),
                     isLoading: false,
                   });
                 },
@@ -160,13 +127,16 @@ export const GistStore = signalStore(
         )
       ),
 
-      createUserGist: rxMethod<[string, CreateGistData]>(
+      createUserGist: rxMethod<CreateGistData>(
         pipe(
           tap(() => patchState(store, { isLoading: true })),
-          switchMap(([token, gistData]) => {
+          switchMap((gistData) => {
+            const token = authStore.user()?.accessToken;
+
             return gistService.createGist(token, gistData).pipe(
               tapResponse({
                 next: () => {
+                  // on successfull creation redirect back to user-gist page
                   router.navigateByUrl('/user-gists');
                   patchState(store, {
                     isLoading: false,
@@ -182,19 +152,17 @@ export const GistStore = signalStore(
         )
       ),
 
-      deleteUserGist: rxMethod<[string, string]>(
+      deleteUserGist: rxMethod<string>(
         pipe(
           tap(() => patchState(store, { isLoading: true })),
-          switchMap(([token, id]) => {
+          switchMap((id) => {
+            const token = authStore.user()?.accessToken;
+
             return gistService.deleteGist(token, id).pipe(
               tapResponse({
                 next: () => {
-                  const currentGists: GistData[] = store.userGists() || [];
-                  const updatedGists = currentGists.filter(
-                    (gist) => gist.id !== id
-                  );
                   patchState(store, {
-                    userGists: updatedGists,
+                    userGists: updateGistsAfterDelete(store.userGists(), id),
                     isLoading: false,
                   });
                 },
@@ -208,10 +176,12 @@ export const GistStore = signalStore(
         )
       ),
 
-      updateUserGist: rxMethod<[string, string, CreateGistData]>(
+      updateUserGist: rxMethod<[string, CreateGistData]>(
         pipe(
           tap(() => patchState(store, { isLoading: true })),
-          switchMap(([token, id, gistData]) => {
+          switchMap(([id, gistData]) => {
+            const token = authStore.user()?.accessToken;
+
             return gistService.updateGist(token, id, gistData).pipe(
               tapResponse({
                 next: () => {
@@ -230,31 +200,18 @@ export const GistStore = signalStore(
         )
       ),
 
-      starGist: rxMethod<[string, string]>(
+      starGist: rxMethod<string>(
         pipe(
           tap(() => patchState(store, { isLoading: true })),
-          switchMap(([token, id]) => {
+          switchMap((id) => {
+            const token = authStore.user()?.accessToken;
+
             return gistService.starGist(token, id).pipe(
               tapResponse({
                 next: (response) => {
-                  console.log('Gist starred Successfully');
-                  const currentUserGists: GistData[] = store.userGists() || [];
-                  const allGists: GistData[] = store.gists() || [];
-
-                  console.log(currentUserGists);
-                  const updatedUserGists = currentUserGists.map((userGist) =>
-                    userGist.id === id
-                      ? { ...userGist, isStarred: true }
-                      : userGist
-                  );
-
-                  const updatedAllGists = allGists.map((gist) =>
-                    gist.id === id ? { ...gist, isStarred: true } : gist
-                  );
-
                   patchState(store, {
-                    gists: updatedAllGists,
-                    userGists: updatedUserGists,
+                    gists: updateStarredStatus(store.gists(), id),
+                    userGists: updateStarredStatus(store.userGists(), id),
                     isLoading: false,
                   });
                 },
@@ -268,10 +225,12 @@ export const GistStore = signalStore(
         )
       ),
 
-      getUserStarredGists: rxMethod<string>(
+      getUserStarredGists: rxMethod<void>(
         pipe(
           tap(() => patchState(store, { isLoading: true })),
-          switchMap((token) => {
+          switchMap(() => {
+            const token = authStore.user()?.accessToken;
+
             return gistService.starredGists(token).pipe(
               tapResponse({
                 next: (gists: GistData[]) => {
@@ -311,4 +270,27 @@ const mapToDataSource = (gist: GistData | any) => {
     description: gist.owner.description,
     isStarred: gist.isStarred,
   };
+};
+
+// Helper function to check gists starred status
+const checkStarredGists = (
+  gists: GistData[],
+  gistService: GistService,
+  token: string
+) => {
+  return gists.map((gist) =>
+    gistService.isGistStarred(token, gist.id).pipe(
+      map(() => ({ ...gist, isStarred: true })),
+      catchError(() => of({ ...gist, isStarred: false }))
+    )
+  );
+};
+
+//Helper function to update the starred status
+const updateStarredStatus = (gists: GistData[], id: string) =>
+  gists.map((gist) => (gist.id === id ? { ...gist, isStarred: true } : gist));
+
+// Helper function to get gist after deletion
+const updateGistsAfterDelete = (gists: GistData[], id: string) => {
+  return gists.filter((gist) => gist.id !== id);
 };

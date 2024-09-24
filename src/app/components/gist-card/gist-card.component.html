@@ -1,5 +1,6 @@
 <mat-card appearance="outlined" class="card" [routerLink]="['/gist/', gist.id]">
   <mat-card-content class="card-code"> code goes here </mat-card-content>
+
   <mat-card-footer class="card-footer">
     <div class="card-profile">
       <img [src]="gist.avatar_url" alt="User Profile Picture" />
@@ -35,12 +36,10 @@
         aria-label="Star Gist"
         (click)="onStarGist($event)"
       >
-        @if(gist.isStarred){
-        <mat-icon>star</mat-icon>
-        }@else {
-        <mat-icon>star_border</mat-icon>}
+        <mat-icon>{{ gist.isStarred ? "star" : "star_border" }}</mat-icon>
       </button>
       @if(!isPublicGists){
+
       <button
         class="actions-btn"
         [disabled]="!authStore.user()"
@@ -60,6 +59,7 @@
       >
         <mat-icon>edit</mat-icon>
       </button>
+
       }
     </div>
   </mat-card-footer>
