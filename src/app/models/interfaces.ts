@@ -83,6 +83,7 @@ export interface GistData {
   forks: GistFork[];
   history: GistHistory[];
   truncated: boolean;
+  isStarred: boolean;
 }
 
 export interface GistState {
@@ -102,6 +103,7 @@ export interface GistPreview {
   type: string;
   updated_at: string;
   description?: string;
+  isStarred?: boolean;
 }
 
 export interface AuthState {

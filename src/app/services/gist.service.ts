@@ -93,4 +93,15 @@ export class GistService {
       headers,
     });
   }
+
+  isGistStarred(token: string, gistId: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get<void>(`${GistEndPoints.GIST_BY_ID}/${gistId}/star`, {
+      headers,
+    });
+  }
 }

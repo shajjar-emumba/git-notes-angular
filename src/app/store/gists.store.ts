@@ -10,9 +10,10 @@ import { GistService } from '../services/gist.service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { computed, inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
-import { pipe, switchMap, tap } from 'rxjs';
+import { catchError, forkJoin, map, of, pipe, switchMap, tap } from 'rxjs';
 import { CreateGistData } from '../models/interfaces';
 import { Router } from '@angular/router';
+import { AuthStore } from './auth.store';
 
 const initialState: GistState = {
   gists: [],
@@ -30,26 +31,12 @@ export const GistStore = signalStore(
     searchGists: computed(() => {
       const gists: GistData[] = store.gists();
 
-      if (gists.length > 0) {
-        return gists
-          .filter(({ owner }) => owner.login.includes(store.searchQuery()))
-          .map(({ owner, files, updated_at, id, description }) => {
-            const firstFile = files[Object.keys(files)[0]];
-            return {
-              id,
-              owner_name: owner.login,
-              gist_name: firstFile?.filename,
-              avatar_url: owner.avatar_url,
-              type: owner.type,
-              updated_at,
-              description,
-            };
-          });
-      } else {
-        return [];
-      }
+      return gists.length
+        ? gists
+            .filter(({ owner }) => owner.login.includes(store.searchQuery()))
+            .map(mapToDataSource)
+        : [];
     }),
-
     dataSource: computed(() => {
       const { gists } = store;
       return gists().map(mapToDataSource);
@@ -57,7 +44,12 @@ export const GistStore = signalStore(
   })),
 
   withMethods(
-    (store, gistService = inject(GistService), router = inject(Router)) => ({
+    (
+      store,
+      gistService = inject(GistService),
+      router = inject(Router),
+      authStore = inject(AuthStore)
+    ) => ({
       udpateSearchQuery(query: string) {
         patchState(store, { searchQuery: query });
       },
@@ -67,10 +59,34 @@ export const GistStore = signalStore(
           tap(() => patchState(store, { isLoading: true })),
           switchMap(() => {
             return gistService.getAllPublicGists().pipe(
+              switchMap((gists: GistData[]) => {
+                if (authStore.user()) {
+                  const token = authStore.user().accessToken;
+                  const starredGistsChecks$ = gists.map((gist) => {
+                    return gistService.isGistStarred(token, gist.id).pipe(
+                      map(() => ({
+                        ...gist,
+                        isStarred: true,
+                      })),
+                      catchError(() =>
+                        of({
+                          ...gist,
+                          isStarred: false,
+                        })
+                      )
+                    );
+                  });
+
+                  return forkJoin(starredGistsChecks$);
+                } else {
+                  return of(gists);
+                }
+              }),
               tapResponse({
-                next: (gists: GistData[]) => {
-                  patchState(store, { gists, isLoading: false }),
-                    console.log(gists);
+                next: (gists) => {
+                  console.log(gists);
+                  patchState(store, { gists, isLoading: false });
+                  console.log(gists);
                 },
                 error: (err: Error) => {
                   patchState(store, { isLoading: false, error: err.message });
@@ -105,16 +121,37 @@ export const GistStore = signalStore(
           tap(() => patchState(store, { isLoading: true })),
           switchMap((token) => {
             return gistService.getUserGists(token).pipe(
+              switchMap((gists: GistData[]) => {
+                if (!gists.length) {
+                  return of([]);
+                }
+                const starredGistsChecks$ = gists.map((gist) => {
+                  return gistService.isGistStarred(token, gist.id).pipe(
+                    map(() => ({
+                      ...mapToDataSource(gist),
+                      isStarred: true,
+                    })),
+                    catchError(() =>
+                      of({
+                        ...mapToDataSource(gist),
+                        isStarred: false,
+                      })
+                    )
+                  );
+                });
+
+                return forkJoin(starredGistsChecks$);
+              }),
               tapResponse({
-                next: (gists: GistData[]) => {
-                  const mappedGist = gists.map(mapToDataSource);
+                next: (mappedGists) => {
+                  console.log(mappedGists);
                   patchState(store, {
-                    userGists: mappedGist,
+                    userGists: mappedGists,
                     isLoading: false,
                   });
                 },
                 error: (err: Error) => {
-                  console.log(err);
+                  console.error(err);
                   patchState(store, { isLoading: false, error: err.message });
                 },
               })
@@ -201,7 +238,23 @@ export const GistStore = signalStore(
               tapResponse({
                 next: (response) => {
                   console.log('Gist starred Successfully');
+                  const currentUserGists: GistData[] = store.userGists() || [];
+                  const allGists: GistData[] = store.gists() || [];
+
+                  console.log(currentUserGists);
+                  const updatedUserGists = currentUserGists.map((userGist) =>
+                    userGist.id === id
+                      ? { ...userGist, isStarred: true }
+                      : userGist
+                  );
+
+                  const updatedAllGists = allGists.map((gist) =>
+                    gist.id === id ? { ...gist, isStarred: true } : gist
+                  );
+
                   patchState(store, {
+                    gists: updatedAllGists,
+                    userGists: updatedUserGists,
                     isLoading: false,
                   });
                 },
@@ -222,7 +275,10 @@ export const GistStore = signalStore(
             return gistService.starredGists(token).pipe(
               tapResponse({
                 next: (gists: GistData[]) => {
-                  const mappedGist = gists.map(mapToDataSource);
+                  const mappedGist = gists.map((gist) => ({
+                    ...mapToDataSource(gist),
+                    isStarred: true,
+                  }));
                   patchState(store, {
                     userGists: mappedGist,
                     isLoading: false,
@@ -253,5 +309,6 @@ const mapToDataSource = (gist: GistData | any) => {
     updated_at: gist.updated_at,
     type: gist.owner.type,
     description: gist.owner.description,
+    isStarred: gist.isStarred,
   };
 };

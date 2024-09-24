@@ -35,7 +35,10 @@
         aria-label="Star Gist"
         (click)="onStarGist($event)"
       >
-        <mat-icon>star_border</mat-icon>
+        @if(gist.isStarred){
+        <mat-icon>star</mat-icon>
+        }@else {
+        <mat-icon>star_border</mat-icon>}
       </button>
       @if(!isPublicGists){
       <button
