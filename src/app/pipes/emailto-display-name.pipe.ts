@@ -8,6 +8,9 @@ export class EmailtoDisplayNamePipe implements PipeTransform {
   transform(email: string, ...args: unknown[]) {
     if (!email) return '';
     const displayName = email.split('@')[0];
-    return displayName;
+    return displayName
+      .split('.')
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ');
   }
 }
