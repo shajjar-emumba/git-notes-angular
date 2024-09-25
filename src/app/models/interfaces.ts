@@ -79,7 +79,7 @@ export interface GistData {
   user: GistOwner | null;
   comments_url: string;
   owner: GistOwner;
-  fork_of: GistFork;
+  fork_of: GistFork | null;
   forks: GistFork[];
   history: GistHistory[];
   truncated: boolean;
