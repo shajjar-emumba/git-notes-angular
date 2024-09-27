@@ -7,7 +7,7 @@ import { MatIconButton } from '@angular/material/button';
 import { JsonPipe, TitleCasePipe } from '@angular/common';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 import { TimeagoPipe } from '../../pipes/timeago.pipe';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-gist-page',
@@ -19,7 +19,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     TitleCasePipe,
     TruncatePipe,
     TimeagoPipe,
-    MatProgressSpinner,
+    LoadingSpinnerComponent,
   ],
   templateUrl: './gist-page.component.html',
   styleUrl: './gist-page.component.scss',

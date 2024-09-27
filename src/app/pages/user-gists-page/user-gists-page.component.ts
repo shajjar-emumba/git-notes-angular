@@ -6,10 +6,10 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TitleCasePipe } from '@angular/common';
 import { TruncatePipe } from '../../pipes/truncate.pipe';
 import { TimeagoPipe } from '../../pipes/timeago.pipe';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { AuthStore } from '../../store/auth.store';
 import { GistCardComponent } from '../../components/gist-card/gist-card.component';
 import { EmailtoDisplayNamePipe } from '../../pipes/emailto-display-name.pipe';
+import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-user-gists-page',
@@ -20,9 +20,9 @@ import { EmailtoDisplayNamePipe } from '../../pipes/emailto-display-name.pipe';
     TitleCasePipe,
     TruncatePipe,
     TimeagoPipe,
-    MatProgressSpinner,
     GistCardComponent,
     EmailtoDisplayNamePipe,
+    LoadingSpinnerComponent,
   ],
   templateUrl: './user-gists-page.component.html',
   styleUrl: './user-gists-page.component.scss',

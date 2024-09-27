@@ -5,25 +5,25 @@ import {
   PageEvent,
 } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { GistStore } from '../../store/gists.store';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { GistTableComponent } from '../../components/landing-page/gist-table/gist-table.component';
 import { GistCardsComponent } from '../../components/landing-page/gist-cards/gist-cards.component';
+import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-landing-page',
   standalone: true,
   imports: [
-    MatProgressSpinnerModule,
     MatPaginatorModule,
     MatButtonToggleModule,
     FormsModule,
     ReactiveFormsModule,
     GistTableComponent,
     GistCardsComponent,
+    LoadingSpinnerComponent,
   ],
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.scss',
