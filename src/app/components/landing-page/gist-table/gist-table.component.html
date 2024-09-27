@@ -1,46 +1,46 @@
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
   <ng-container matColumnDef="owner_name">
     <th mat-header-cell *matHeaderCellDef>Owner Name</th>
-    <td mat-cell *matCellDef="let element" class="table-profile">
+    <td mat-cell *matCellDef="let gist" class="table-profile">
       <img
-        src="{{ element.avatar_url }}"
+        src="{{ gist.avatar_url }}"
         alt="Profile Image"
         class="profile-image"
       />
-      <span class="username">{{ element.owner_name | titlecase }}</span>
+      <span class="username">{{ gist.owner_name | titlecase }}</span>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="gist_name">
     <th mat-header-cell *matHeaderCellDef>Gist Name</th>
-    <td mat-cell *matCellDef="let element">
-      {{ element.gist_name | truncate : 20 }}
+    <td mat-cell *matCellDef="let gist">
+      {{ gist.gist_name | truncate : 20 }}
     </td>
   </ng-container>
 
   <ng-container matColumnDef="type">
     <th mat-header-cell *matHeaderCellDef>Type</th>
-    <td mat-cell *matCellDef="let element">
-      {{ element.type }}
+    <td mat-cell *matCellDef="let gist">
+      {{ gist.type }}
     </td>
   </ng-container>
 
   <ng-container matColumnDef="updated_at">
     <th mat-header-cell *matHeaderCellDef>Updated at</th>
-    <td mat-cell *matCellDef="let element">
-      {{ element.updated_at | timeago }}
+    <td mat-cell *matCellDef="let gist">
+      {{ gist.updated_at | timeago }}
     </td>
   </ng-container>
 
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef>Actions</th>
-    <td mat-cell *matCellDef="let element">
+    <td mat-cell *matCellDef="let gist">
       <button
         class="actions-btn"
         [disabled]="!authStore.user()"
         mat-icon-button
         aria-label="Fork Gist"
-        (click)="$event.stopPropagation()"
+        (click)="onForkGist(gist.id, $event)"
       >
         <mat-icon>fork_right</mat-icon>
       </button>
@@ -49,9 +49,9 @@
         [disabled]="!authStore.user()"
         mat-icon-button
         aria-label="Star Gist"
-        (click)="$event.stopPropagation()"
+        (click)="onStarGist(gist.id, $event)"
       >
-        <mat-icon>star_border</mat-icon>
+        <mat-icon>{{ gist.isStarred ? "star" : "star_border" }}</mat-icon>
       </button>
     </td>
   </ng-container>

@@ -51,4 +51,14 @@ export class GistTableComponent {
     'updated_at',
     'actions',
   ];
+
+  onStarGist(id: string, e: Event) {
+    e.stopPropagation();
+    this.gistStore.starGist(id);
+  }
+
+  onForkGist(id: string, e: Event) {
+    e.stopPropagation();
+    this.gistStore.forkAGist(id);
+  }
 }

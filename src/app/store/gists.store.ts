@@ -282,7 +282,6 @@ export const GistStore = signalStore(
 
 // Helper function to map gists for DataSource
 const mapToDataSource = (gist: GistData | any) => {
-  console.log(gist);
   const firstFile = gist.files[Object.keys(gist.files)[0]];
   return {
     id: gist.id,
