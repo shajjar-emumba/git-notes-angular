@@ -40,7 +40,12 @@ export class GistCardComponent {
 
   onStarGist(e: Event) {
     e.stopPropagation();
-    this.gistStore.starGist(this.gist.id);
+
+    if (this.gist.isStarred) {
+      this.gistStore.unstarGist(this.gist.id);
+    } else {
+      this.gistStore.starGist(this.gist.id);
+    }
   }
 
   onForkGist(e: Event) {

@@ -49,7 +49,7 @@
         [disabled]="!authStore.user()"
         mat-icon-button
         aria-label="Star Gist"
-        (click)="onStarGist(gist.id, $event)"
+        (click)="onStarGist(gist, $event)"
       >
         <mat-icon>{{ gist.isStarred ? "star" : "star_border" }}</mat-icon>
       </button>

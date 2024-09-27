@@ -15,6 +15,7 @@ import { MatIconButton } from '@angular/material/button';
 import { TimeagoPipe } from '../../../pipes/timeago.pipe';
 import { AuthStore } from '../../../store/auth.store';
 import { RouterLink } from '@angular/router';
+import { GistPreview } from '../../../models/interfaces';
 
 @Component({
   selector: 'app-gist-table',
@@ -52,9 +53,14 @@ export class GistTableComponent {
     'actions',
   ];
 
-  onStarGist(id: string, e: Event) {
+  onStarGist(gist: GistPreview, e: Event) {
     e.stopPropagation();
-    this.gistStore.starGist(id);
+
+    if (gist.isStarred) {
+      this.gistStore.unstarGist(gist.id);
+    } else {
+      this.gistStore.starGist(gist.id);
+    }
   }
 
   onForkGist(id: string, e: Event) {

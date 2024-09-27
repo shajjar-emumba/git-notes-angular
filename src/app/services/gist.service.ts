@@ -119,4 +119,18 @@ export class GistService {
       }
     );
   }
+
+  unstarGist(token: string, gistId: string): Observable<GistData> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.delete<GistData>(
+      `${GistEndPoints.GIST_BY_ID}/${gistId}/star`,
+      {
+        headers,
+      }
+    );
+  }
 }

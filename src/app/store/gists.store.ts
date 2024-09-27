@@ -282,6 +282,42 @@ export const GistStore = signalStore(
         )
       ),
 
+      unstarGist: rxMethod<string>(
+        pipe(
+          tap(() => patchState(store, { isLoading: true })),
+          switchMap((id) => {
+            const token = authStore.user()?.accessToken;
+
+            return gistService.unstarGist(token, id).pipe(
+              tapResponse({
+                next: (response) => {
+                  console.log(response);
+                  patchState(store, {
+                    gists: updateStarredStatus(store.gists(), id, false),
+                    userGists: updateStarredStatus(
+                      store.userGists(),
+                      id,
+                      false
+                    ),
+                    isLoading: false,
+                  });
+                  showSnackBarFeedback(
+                    'Gist unstarred successfully',
+                    'Close',
+                    false,
+                    snackBar
+                  );
+                },
+                error: (err: Error) => {
+                  console.log(err);
+                  patchState(store, { isLoading: false, error: err.message });
+                },
+              })
+            );
+          })
+        )
+      ),
+
       getUserStarredGists: rxMethod<void>(
         pipe(
           tap(() => patchState(store, { isLoading: true })),
@@ -386,8 +422,12 @@ const checkStarredGists = (
 };
 
 //Helper function to update the starred status
-const updateStarredStatus = (gists: GistData[], id: string) =>
-  gists.map((gist) => (gist.id === id ? { ...gist, isStarred: true } : gist));
+const updateStarredStatus = (
+  gists: GistData[],
+  id: string,
+  star: boolean = true
+) =>
+  gists.map((gist) => (gist.id === id ? { ...gist, isStarred: star } : gist));
 
 // Helper function to get gist after deletion
 const updateGistsAfterDelete = (gists: GistData[], id: string) => {
