@@ -66,3 +66,15 @@ body {
 .mat-mdc-menu-item {
   min-height: 30px !important;
 }
+
+.snackbar-success {
+  .mdc-snackbar__surface {
+    background-color: #003b44 !important;
+  }
+}
+
+.snackbar-error {
+  .mdc-snackbar__surface {
+    background-color: red !important;
+  }
+}

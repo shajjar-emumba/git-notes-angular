@@ -14,6 +14,7 @@ import { catchError, forkJoin, map, of, pipe, switchMap, tap } from 'rxjs';
 import { CreateGistData } from '../models/interfaces';
 import { Router } from '@angular/router';
 import { AuthStore } from './auth.store';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 const initialState: GistState = {
   gists: [],
@@ -49,7 +50,8 @@ export const GistStore = signalStore(
       store,
       gistService = inject(GistService),
       router = inject(Router),
-      authStore = inject(AuthStore)
+      authStore = inject(AuthStore),
+      snackBar = inject(MatSnackBar)
     ) => ({
       udpateSearchQuery(query: string) {
         patchState(store, { searchQuery: query });
@@ -72,6 +74,12 @@ export const GistStore = signalStore(
                 },
                 error: (err: Error) => {
                   patchState(store, { isLoading: false, error: err.message });
+                  showSnackBarFeedback(
+                    'Something went wrong loading all gists!',
+                    'Close',
+                    true,
+                    snackBar
+                  );
                 },
               })
             );
@@ -120,6 +128,12 @@ export const GistStore = signalStore(
                 error: (err: Error) => {
                   console.error(err);
                   patchState(store, { isLoading: false, error: err.message });
+                  showSnackBarFeedback(
+                    'Something went wrong loading user gists!',
+                    'Close',
+                    true,
+                    snackBar
+                  );
                 },
               })
             );
@@ -141,10 +155,23 @@ export const GistStore = signalStore(
                   patchState(store, {
                     isLoading: false,
                   });
+
+                  showSnackBarFeedback(
+                    'Gist created successfully',
+                    'Close',
+                    false,
+                    snackBar
+                  );
                 },
                 error: (err: Error) => {
                   console.log(err);
                   patchState(store, { isLoading: false, error: err.message });
+                  showSnackBarFeedback(
+                    'Something went wrong creating gist',
+                    'Close',
+                    true,
+                    snackBar
+                  );
                 },
               })
             );
@@ -165,10 +192,22 @@ export const GistStore = signalStore(
                     userGists: updateGistsAfterDelete(store.userGists(), id),
                     isLoading: false,
                   });
+                  showSnackBarFeedback(
+                    'Gist deleted successfully',
+                    'Close',
+                    false,
+                    snackBar
+                  );
                 },
                 error: (err: Error) => {
                   console.log(err);
                   patchState(store, { isLoading: false, error: err.message });
+                  showSnackBarFeedback(
+                    'Something went wrong deleting gist!',
+                    'Close',
+                    true,
+                    snackBar
+                  );
                 },
               })
             );
@@ -189,10 +228,22 @@ export const GistStore = signalStore(
                   patchState(store, {
                     isLoading: false,
                   });
+                  showSnackBarFeedback(
+                    'Gist updated successfully',
+                    'Close',
+                    false,
+                    snackBar
+                  );
                 },
                 error: (err: Error) => {
                   console.log(err);
                   patchState(store, { isLoading: false, error: err.message });
+                  showSnackBarFeedback(
+                    'Something went wrong updating gist!',
+                    'Close',
+                    true,
+                    snackBar
+                  );
                 },
               })
             );
@@ -214,6 +265,12 @@ export const GistStore = signalStore(
                     userGists: updateStarredStatus(store.userGists(), id),
                     isLoading: false,
                   });
+                  showSnackBarFeedback(
+                    'Gist starred successfully',
+                    'Close',
+                    false,
+                    snackBar
+                  );
                 },
                 error: (err: Error) => {
                   console.log(err);
@@ -246,6 +303,12 @@ export const GistStore = signalStore(
                 error: (err: Error) => {
                   console.log(err);
                   patchState(store, { isLoading: false, error: err.message });
+                  showSnackBarFeedback(
+                    'Something went wrong starring gist!',
+                    'Close',
+                    true,
+                    snackBar
+                  );
                 },
               })
             );
@@ -266,10 +329,22 @@ export const GistStore = signalStore(
                     gists: [forkedGist, ...store.gists()],
                     isLoading: false,
                   });
+                  showSnackBarFeedback(
+                    'Gist forked successfully',
+                    'Close',
+                    false,
+                    snackBar
+                  );
                 },
                 error: (err: Error) => {
                   console.log(err);
                   patchState(store, { isLoading: false, error: err.message });
+                  showSnackBarFeedback(
+                    'Something went wrong forking gist!',
+                    'Close',
+                    true,
+                    snackBar
+                  );
                 },
               })
             );
@@ -317,4 +392,18 @@ const updateStarredStatus = (gists: GistData[], id: string) =>
 // Helper function to get gist after deletion
 const updateGistsAfterDelete = (gists: GistData[], id: string) => {
   return gists.filter((gist) => gist.id !== id);
+};
+
+// Helper function to show snackbar feedback
+const showSnackBarFeedback = (
+  message: string,
+  action: string = 'Close',
+  isError: boolean = false,
+  snackBar: MatSnackBar
+) => {
+  const panelClass = isError ? 'snackbar-error' : 'snackbar-success';
+  snackBar.open(message, action, {
+    duration: 2000,
+    panelClass: panelClass,
+  });
 };
