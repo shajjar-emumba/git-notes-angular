@@ -25,7 +25,7 @@
         [disabled]="!authStore.user()"
         mat-icon-button
         aria-label="Fork Gist"
-        (click)="$event.stopPropagation()"
+        (click)="onForkGist($event)"
       >
         <mat-icon>fork_right</mat-icon>
       </button>

@@ -252,12 +252,37 @@ export const GistStore = signalStore(
           })
         )
       ),
+
+      forkAGist: rxMethod<string>(
+        pipe(
+          tap(() => patchState(store, { isLoading: true })),
+          switchMap((id) => {
+            const token = authStore.user()?.accessToken;
+
+            return gistService.forkGist(token, id).pipe(
+              tapResponse({
+                next: (forkedGist: GistData) => {
+                  patchState(store, {
+                    gists: [forkedGist, ...store.gists()],
+                    isLoading: false,
+                  });
+                },
+                error: (err: Error) => {
+                  console.log(err);
+                  patchState(store, { isLoading: false, error: err.message });
+                },
+              })
+            );
+          })
+        )
+      ),
     })
   )
 );
 
 // Helper function to map gists for DataSource
 const mapToDataSource = (gist: GistData | any) => {
+  console.log(gist);
   const firstFile = gist.files[Object.keys(gist.files)[0]];
   return {
     id: gist.id,

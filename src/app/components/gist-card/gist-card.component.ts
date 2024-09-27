@@ -42,4 +42,9 @@ export class GistCardComponent {
     e.stopPropagation();
     this.gistStore.starGist(this.gist.id);
   }
+
+  onForkGist(e: Event) {
+    e.stopPropagation();
+    this.gistStore.forkAGist(this.gist.id);
+  }
 }

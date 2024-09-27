@@ -104,4 +104,19 @@ export class GistService {
       headers,
     });
   }
+
+  forkGist(token: string, gistId: string): Observable<GistData> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post<GistData>(
+      `${GistEndPoints.GIST_BY_ID}/${gistId}/forks`,
+      { gist_id: gistId },
+      {
+        headers,
+      }
+    );
+  }
 }
