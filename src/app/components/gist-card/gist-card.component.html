@@ -6,7 +6,11 @@
       <img [src]="gist.avatar_url" alt="User Profile Picture" />
       <div>
         <p>
-          {{ gist.owner_name | titlecase }}/
+          {{
+            isPublicGists
+              ? (gist.owner_name | truncate : 10 | titlecase)
+              : (gist.owner_name | titlecase)
+          }}/
           <span class="gist-name">
             {{ gist.gist_name | truncate : 10 }}
           </span>
