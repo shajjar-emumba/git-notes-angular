@@ -46,5 +46,9 @@ Thumbs.db
 *-debug.log
 .runtimeconfig.json
 
-#Envrionment
-src/environments/
+/src/environments/environment.development.ts
+#env
+.env
+
+# Local Netlify folder
+.netlify
