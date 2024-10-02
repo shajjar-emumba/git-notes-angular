@@ -10,6 +10,10 @@ export class TimeagoPipe implements PipeTransform {
     const now = new Date();
     const differenceInMilliseconds = now.getTime() - updatedDate.getTime();
 
+    if (differenceInMilliseconds < 0) {
+      return 'Just now';
+    }
+
     const hoursAgo = Math.floor(differenceInMilliseconds / (1000 * 60 * 60));
 
     if (hoursAgo === 0) {
