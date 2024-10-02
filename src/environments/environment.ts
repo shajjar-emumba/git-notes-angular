@@ -1,12 +1,11 @@
-
 export const environment = {
   production: true,
   firebase: {
-    apiKey: 'AIzaSyBzVScsTAbeZee6LryKqn62NhYwBIIdThQ',
-    authDomain: 'git-notes-angular-firebase.firebaseapp.com',
-    projectId: 'git-notes-angular-firebase',
-    storageBucket: 'git-notes-angular-firebase.appspot.com',
-    messagingSenderId: '676307729951',
-    appId: '1:676307729951:web:bfeb20bc2eabaf44c45f2a',
-  }
+    apiKey: process.env['NG_APP_FIREBASE_API_KEY'],
+    authDomain: process.env['NG_APP_FIREBASE_AUTH_DOMAIN'],
+    projectId: process.env['NG_APP_FIREBASE_PROJECT_ID'],
+    storageBucket: process.env['NG_APP_FIREBASE_STORAGE_BUCKET'],
+    messagingSenderId: process.env['NG_APP_FIREBASE_MESSAGING_SENDER_ID'],
+    appId: process.env['NG_APP_FIREBASE_APP_ID'],
+  },
 };
