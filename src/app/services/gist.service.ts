@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CreateGistData, GistData } from '../models/interfaces';
@@ -18,119 +18,49 @@ export class GistService {
     return this.http.get<GistData[]>(`${GistEndPoints.GIST_BY_ID}/${id}`);
   }
 
-  getUserGists(token: string): Observable<GistData[]> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    return this.http.get<GistData[]>(`${GistEndPoints.USER_GISTS}`, {
-      headers,
-    });
+  getUserGists(): Observable<GistData[]> {
+    return this.http.get<GistData[]>(`${GistEndPoints.USER_GISTS}`);
   }
 
-  createGist(token: string, gistData: CreateGistData): Observable<GistData> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
-
-    return this.http.post<GistData>(GistEndPoints.CREATE_GIST, gistData, {
-      headers,
-    });
+  createGist(gistData: CreateGistData): Observable<GistData> {
+    return this.http.post<GistData>(GistEndPoints.CREATE_GIST, gistData);
   }
 
-  deleteGist(token: string, gistId: string): Observable<void> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    return this.http.delete<void>(`${GistEndPoints.GIST_BY_ID}/${gistId}`, {
-      headers,
-    });
+  deleteGist(gistId: string): Observable<void> {
+    return this.http.delete<void>(`${GistEndPoints.GIST_BY_ID}/${gistId}`);
   }
 
-  updateGist(
-    token: string,
-    gistId: string,
-    gistData: CreateGistData
-  ): Observable<GistData> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
-
+  updateGist(gistId: string, gistData: CreateGistData): Observable<GistData> {
     return this.http.patch<GistData>(
       `${GistEndPoints.GIST_BY_ID}/${gistId}`,
-      gistData,
-      {
-        headers,
-      }
+      gistData
     );
   }
 
-  starGist(token: string, gistId: string): Observable<void> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
-
-    return this.http.put<void>(
-      `${GistEndPoints.GIST_BY_ID}/${gistId}/star`,
-      { gist_id: gistId },
-      {
-        headers,
-      }
-    );
-  }
-
-  starredGists(token: string): Observable<GistData[]> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
-
-    return this.http.get<GistData[]>(`${GistEndPoints.STARRED_GIST}`, {
-      headers,
+  starGist(gistId: string): Observable<void> {
+    return this.http.put<void>(`${GistEndPoints.GIST_BY_ID}/${gistId}/star`, {
+      gist_id: gistId,
     });
   }
 
-  isGistStarred(token: string, gistId: string): Observable<any> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
-
-    return this.http.get<void>(`${GistEndPoints.GIST_BY_ID}/${gistId}/star`, {
-      headers,
-    });
+  starredGists(): Observable<GistData[]> {
+    return this.http.get<GistData[]>(`${GistEndPoints.STARRED_GIST}`);
   }
 
-  forkGist(token: string, gistId: string): Observable<GistData> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
+  isGistStarred(gistId: string): Observable<any> {
+    return this.http.get<void>(`${GistEndPoints.GIST_BY_ID}/${gistId}/star`);
+  }
 
+  forkGist(gistId: string): Observable<GistData> {
     return this.http.post<GistData>(
       `${GistEndPoints.GIST_BY_ID}/${gistId}/forks`,
-      { gist_id: gistId },
-      {
-        headers,
-      }
+      { gist_id: gistId }
     );
   }
 
-  unstarGist(token: string, gistId: string): Observable<GistData> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
-
+  unstarGist(gistId: string): Observable<GistData> {
     return this.http.delete<GistData>(
-      `${GistEndPoints.GIST_BY_ID}/${gistId}/star`,
-      {
-        headers,
-      }
+      `${GistEndPoints.GIST_BY_ID}/${gistId}/star`
     );
   }
 }

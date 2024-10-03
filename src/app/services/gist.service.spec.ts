@@ -55,13 +55,12 @@ describe('GistService', () => {
   it('should create a new gist', () => {
     const token = 'mockToken';
 
-    service.createGist(token, mockCreateGistData).subscribe((gist) => {
+    service.createGist(mockCreateGistData).subscribe((gist) => {
       expect(gist).toEqual(mockGistData[0]);
     });
 
     const req = httpController.expectOne(GistEndPoints.CREATE_GIST);
     expect(req.request.method).toBe('POST');
-    expect(req.request.headers.get('Authorization')).toBe(`Bearer ${token}`);
     expect(req.request.body).toEqual(mockCreateGistData);
 
     req.flush(mockGistData[0]);
@@ -71,7 +70,7 @@ describe('GistService', () => {
     const token = 'mockToken';
     const gistId = '123';
 
-    service.deleteGist(token, gistId).subscribe((response) => {
+    service.deleteGist(gistId).subscribe((response) => {
       expect(response).toBeNull();
     });
 
@@ -79,7 +78,6 @@ describe('GistService', () => {
       `${GistEndPoints.GIST_BY_ID}/${gistId}`
     );
     expect(req.request.method).toBe('DELETE');
-    expect(req.request.headers.get('Authorization')).toBe(`Bearer ${token}`);
 
     req.flush(null);
   });
@@ -88,7 +86,7 @@ describe('GistService', () => {
     const token = 'mockToken';
     const gistId = '123';
 
-    service.updateGist(token, gistId, mockCreateGistData).subscribe((gist) => {
+    service.updateGist(gistId, mockCreateGistData).subscribe((gist) => {
       expect(gist).toEqual(mockGistData[0]);
     });
 
@@ -96,7 +94,6 @@ describe('GistService', () => {
       `${GistEndPoints.GIST_BY_ID}/${gistId}`
     );
     expect(req.request.method).toBe('PATCH');
-    expect(req.request.headers.get('Authorization')).toBe(`Bearer ${token}`);
     expect(req.request.body).toEqual(mockCreateGistData);
 
     req.flush(mockGistData[0]);
@@ -106,7 +103,7 @@ describe('GistService', () => {
     const token = 'mockToken';
     const gistId = '123';
 
-    service.starGist(token, gistId).subscribe((response) => {
+    service.starGist(gistId).subscribe((response) => {
       expect(response).toBeNull();
     });
 
@@ -114,7 +111,6 @@ describe('GistService', () => {
       `${GistEndPoints.GIST_BY_ID}/${gistId}/star`
     );
     expect(req.request.method).toBe('PUT');
-    expect(req.request.headers.get('Authorization')).toBe(`Bearer ${token}`);
 
     req.flush(null);
   });
@@ -122,13 +118,12 @@ describe('GistService', () => {
   it('should retrieve starred gists', () => {
     const token = 'mockToken';
 
-    service.starredGists(token).subscribe((gists) => {
+    service.starredGists().subscribe((gists) => {
       expect(gists).toEqual(mockGistData);
     });
 
     const req = httpController.expectOne(GistEndPoints.STARRED_GIST);
     expect(req.request.method).toBe('GET');
-    expect(req.request.headers.get('Authorization')).toBe(`Bearer ${token}`);
 
     req.flush(mockGistData);
   });
